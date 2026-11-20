@@ -1,47 +1,54 @@
-# E2E QA Runner (Playwright, multi-user)
+# AgenticTW: Tent World E2E QA Runner
 
-## Setup
+Local multi-user end-to-end tests (Playwright, Python) for login, session
+persistence, localization and page checks on Tent World.
 
-**Windows PowerShell**
-```powershell
-cd path\to\e2e-qa-runner
-python -m venv .venv
-# If activation is blocked: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m playwright install chromium
-Copy-Item users.example.json users.json
-```
+## Layout
 
-**macOS / Linux (bash/zsh)**
+| File | Role |
+|---|---|
+| `site_map.json` | All URLs + CSS selectors, grouped by page. **Local only** (gitignored). Template: `site_map.example.json` |
+| `users.json` | Test accounts + viewport / locale / timezone / user agent / proxy / session file. **Local only**. Template: `users.example.json` |
+| `browser_factory.py` | The **only** module that imports Playwright, launches browsers, creates contexts, sets network/proxy and loads/saves sessions |
+| `pages/` | One module per page. Every action is `action(page, site_map, user)` |
+| `test_runner.py` | Loads config, selects profiles, VPN pause, runs `SCENARIO` |
+| `sessions/` | Saved logins (cookies). **Local only**, treat like passwords |
+
+### Rules
+1. Never `import playwright` outside `browser_factory.py`. Page modules that need
+   `expect`, `BrowserError` or `BrowserTimeoutError` import them from `browser_factory`.
+2. Never hardcode a URL or selector in Python: add it to `site_map.json` under
+   `pages.<page>.url` / `pages.<page>.selectors.<name>` and read it with
+   `pages.common.sel(site_map, "<page>", "<name>")`.
+3. To change engine, launch flags or network routing, edit only `browser_factory.py`
+   (`HEADLESS`, `SLOW_MO_MS`, `LAUNCH_ARGS`, `_launch_browser`).
+
+## First run
 ```bash
-cd path/to/e2e-qa-runner
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m playwright install chromium
-# Linux only, if Chromium complains about missing system libraries:
-#   sudo .venv/bin/python -m playwright install-deps chromium
-cp users.example.json users.json
+cp site_map.example.json site_map.json   # then fill in your URLs/selectors
+cp users.example.json users.json         # then fill in your accounts
+python test_runner.py
 ```
 
-Then edit `config.json` (URL + selectors) and `users.json` (accounts).
+## site_map.json
+- `settings`: `captcha_timeout_ms`, `action_delay_ms` (pause between steps),
+  optional `session_check_timeout_ms`, `page_timeout_ms`.
+- Required pages: `login` (`username_input`, `password_input`, `submit_button`) and
+  `home` (the page after login, with `logged_in_indicator`).
+- Any other page may define `page_ready`: a selector that must be visible for the page to count as loaded.
 
-## Run (with .venv activated)
-```
-python test_runner.py                         # interactive menu
-python test_runner.py --all                   # all profiles
-python test_runner.py --profile user1_desktop_es
-python test_runner.py --all --fresh           # ignore saved sessions
-python test_runner.py --all --no-pause        # skip the VPN pause
-python test_runner.py --list
-```
+## users.json extras
+- `"password": ""` makes the runner prompt for it in the terminal.
+- `"proxy"`: `null`, `"http://host:port"`, or
+  `{"server": "http://host:port", "username": "...", "password": "...", "bypass": "localhost"}`.
 
-## Notes
-- `post_login_url_or_selector`: a URL (`https://...`) is opened to check a saved
-  session; a CSS selector is checked on `login_url` instead.
-- Leave `password` as `""` in `users.json` to be prompted securely at runtime.
-- `sessions/*.json` contain live auth cookies, so treat them like passwords.
-- Moving to another machine: copy the folder **without** `.venv/` and rerun setup.
+## Adding a page
+1. Add `pages.<name>` with `url` + `selectors` to `site_map.json` (and the example file).
+2. Create `pages/<name>.py` with `def visit_<name>(page, site_map, user)`.
+3. Export it in `pages/__init__.py` and append it to `SCENARIO` in `test_runner.py`.
+
+## CLI
+```
+python test_runner.py [--all | --profile NAME ... | --list] [--fresh] [--no-pause]
+                      [--site-map PATH] [--users PATH]
+```

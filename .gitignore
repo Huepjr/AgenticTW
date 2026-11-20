@@ -8,7 +8,9 @@ __pycache__/
 # Saved authenticated browser sessions (contain cookies/tokens - never commit)
 sessions/
 
-# Real test credentials
+# Local private config: real URLs/selectors and credentials
+# (committed templates: site_map.example.json, users.example.json)
+site_map.json
 users.json
 
 # OS / editor noise

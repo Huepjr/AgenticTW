@@ -1,0 +1,36 @@
+{
+  "settings": {
+    "captcha_timeout_ms": 120000,
+    "action_delay_ms": 1500,
+    "session_check_timeout_ms": 10000,
+    "page_timeout_ms": 15000
+  },
+  "pages": {
+    "login": {
+      "url": "https://example.com/login",
+      "selectors": {
+        "username_input": "#username",
+        "password_input": "#password",
+        "submit_button": "#submit"
+      }
+    },
+    "home": {
+      "url": "https://example.com/dashboard",
+      "selectors": {
+        "logged_in_indicator": "#dashboard"
+      }
+    },
+    "building": {
+      "url": "https://example.com/building",
+      "selectors": {
+        "page_ready": "#building"
+      }
+    },
+    "market": {
+      "url": "https://example.com/market",
+      "selectors": {
+        "page_ready": "#market"
+      }
+    }
+  }
+}
