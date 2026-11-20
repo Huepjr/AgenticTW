@@ -1,0 +1,18 @@
+# Local virtual environment
+.venv/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Saved authenticated browser sessions (contain cookies/tokens - never commit)
+sessions/
+
+# Real test credentials
+users.json
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

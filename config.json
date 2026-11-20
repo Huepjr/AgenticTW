@@ -1,0 +1,13 @@
+{
+  "login_url": "https://example.com/login",
+  "post_login_url_or_selector": "https://example.com/dashboard",
+  "selectors": {
+    "username_input": "#username",
+    "password_input": "#password",
+    "submit_button": "#submit",
+    "post_login_indicator": "#dashboard"
+  },
+  "captcha_timeout_ms": 120000,
+  "session_check_timeout_ms": 10000,
+  "slow_mo_ms": 0
+}

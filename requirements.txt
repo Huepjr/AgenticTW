@@ -1,0 +1,2 @@
+# E2E QA runner dependencies (pinned for reproducible environments)
+playwright==1.65.2

@@ -1,0 +1,31 @@
+[
+  {
+    "profile_name": "user1_desktop_es",
+    "username": "qa.user1@example.com",
+    "password": "CHANGE_ME",
+    "viewport": { "width": 1920, "height": 1080 },
+    "locale": "es-ES",
+    "timezone_id": "Europe/Madrid",
+    "user_agent": "",
+    "session_file": "sessions/user1.json"
+  },
+  {
+    "profile_name": "user2_laptop_de",
+    "username": "qa.user2@example.com",
+    "password": "",
+    "viewport": { "width": 1366, "height": 768 },
+    "locale": "de-CH",
+    "timezone_id": "Europe/Zurich",
+    "session_file": "sessions/user2.json"
+  },
+  {
+    "profile_name": "user3_mobile_en",
+    "username": "qa.user3@example.com",
+    "password": "CHANGE_ME",
+    "viewport": { "width": 390, "height": 844 },
+    "locale": "en-US",
+    "timezone_id": "America/New_York",
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
+    "session_file": "sessions/user3.json"
+  }
+]
